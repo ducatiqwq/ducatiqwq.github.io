@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Overview After attending some lectures and reviewing several materials, it took me a considerable amount of time to grasp the basics of the exponential family and understand why and how they can be">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Generalized Linear Models.md">
+<meta property="og:url" content="http://example.com/2024/05/14/Generalized-Linear-Models-Overview/index.html">
+<meta property="og:site_name" content="Ducati&#39;s blog">
+<meta property="og:description" content="Overview After attending some lectures and reviewing several materials, it took me a considerable amount of time to grasp the basics of the exponential family and understand why and how they can be">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-05-14T09:51:37.000Z">
+<meta property="article:modified_time" content="2024-05-19T06:23:53.263Z">
+<meta property="article:author" content="ducati">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2024/05/14/Generalized-Linear-Models-Overview/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Generalized Linear Models.md | Ducati's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Ducati's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/05/14/Generalized-Linear-Models-Overview/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.postimg.cc/8CTV3gyC/avatar.png">
+      <meta itemprop="name" content="ducati">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ducati's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Generalized Linear Models.md
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-05-14 17:51:37" itemprop="dateCreated datePublished" datetime="2024-05-14T17:51:37+08:00">2024-05-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-05-19 14:23:53" itemprop="dateModified" datetime="2024-05-19T14:23:53+08:00">2024-05-19</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="overview">Overview</h2>
+<p>After attending some lectures and reviewing several materials, it
+took me a considerable amount of time to grasp the basics of the
+exponential family and understand why and how they can be applied to
+GLMs (Generalized Linear Models). The fundamentals of GLMs will be
+thoroughly explained in this article.</p>
+<p>We will begin with exponential families, then cover the basics of
+some machine learning algorithms (e.g. linear regression and logistic
+regression) and discover what they have in common. In the end, we will
+integrate all these concepts to derive a larger scale of models and to
+understand the reasons behind these desirable properties.</p>
+<p><strong>Note</strong>: This article is aimed at providing an
+overview, and some mathematical details are omitted. Readers can
+complete proofs on their own or by checking the resources listed at the
+end of the article.</p>
+<h2 id="exponential-family">Exponential Family</h2>
+<p>The exponential familiy involves a set of <strong>probability
+distributions</strong> whose probability density function can be
+expressed as <span class="math display">\[\begin{equation} \label{eq1}
+P(y | \theta) = h(y) \exp(\eta(\theta)^T T(y) - A(\theta))
+\end{equation}\]</span></p>
+<p>Or in canonical form <span class="math display">\[\begin{equation}
+\label{eq2} P(y | \theta) = h(y) \exp(\theta^T T(y) - A(\theta))
+\end{equation}\]</span></p>
+<p>Where <span class="math inline">\(\theta\)</span> is the natural
+parameter or the canonical parameter, <span
+class="math inline">\(T(y)\)</span> is the sufficient statistic, and
+<span class="math inline">\(A(\theta)\)</span> is the log partition
+funciton: <span class="math display">\[A(\theta) = \log \int h(y)
+\exp(\theta^T T(y))\ \text{d}y\]</span></p>
+<h3 id="properties">Properties</h3>
+<p><strong>Property 1</strong>: <span class="math inline">\(\frac
+{\partial A(\theta)} {\partial \theta} = \mathrm{E}(T(y))\)</span></p>
+<p><strong>Property 2</strong>: <span class="math inline">\(\frac
+{\partial^2 A(\theta)} {\partial \theta^2} =
+\mathrm{Var}(T(y))\)</span></p>
+<p><strong>Property 3</strong>: Let <span
+class="math inline">\(\mathcal{L}(\theta | y) = \log P(y |
+\theta)\)</span> be the log-likelihood function, then <span
+class="math display">\[\begin{aligned} \frac {\partial
+\mathcal{L}(\theta | y)} {\partial \theta} &amp;= T(y) - \frac {\partial
+A(\theta)} {\partial \theta} \\ &amp;= T(y) -
+E(T(y))  \end{aligned}  \]</span></p>
+<p><strong>Property 4</strong>: <span
+class="math inline">\(\mathcal{L}(\theta | y)\)</span> is concave.</p>
+<h2 id="linear-regression-and-logisitic-regression">Linear Regression
+and Logisitic Regression</h2>
+<p>Now, let's review two of the most important algorithms in the field
+of machine learning: (ordinary) linear regression and logistic
+regression.</p>
+<h3 id="linear-regression">Linear Regression</h3>
+<p>Suppose we have <span class="math inline">\(m\)</span> samples and
+<span class="math inline">\(n\)</span> features. Let <span
+class="math inline">\(x_i, y_i\)</span> be the input vector and the
+target of the <span class="math inline">\(i\)</span>-th sample
+respectively. We would like to find the parameters <span
+class="math inline">\(\beta\)</span> that best fits the linear
+relationship between features and targets.</p>
+<p>A common choice is to use <strong>normal distribution</strong> as the
+probabilistic assumption. Here we assume <span
+class="math inline">\(\boldsymbol{\mu = x_i^T \beta},\ \sigma =
+1\)</span> for the <span class="math inline">\(i\)</span>-th sample, so
+the likelihood function is given by <span
+class="math display">\[\mathcal{L}(\beta) = \frac {1} {\sqrt{2\pi}} \exp
+\left(-\frac {(y_i-x_i^T\beta)^2} {2} \right)\]</span></p>
+<p>Take the derivatives of the log-likelihood and we will get <span
+class="math display">\[\frac {\partial \log \mathcal{L}(\beta)}
+{\partial \beta} = (y_i - x_i^T\beta) x_i\]</span></p>
+<p>Let <span class="math inline">\(h_{\beta}(x)\)</span> be the model
+prediction given input <span class="math inline">\(x\)</span>, we have
+<span class="math display">\[\frac {\partial \log \mathcal{L}(\beta)}
+{\partial \beta} = (y_i - h_{\beta}(x)) x_i\]</span></p>
+<p>So the update rule with gradient ascent is given by <span
+class="math display">\[\beta \leftarrow \beta + \alpha (y_i -
+h_{\beta}(x)) {x_i}\]</span></p>
+<p>Where <span class="math inline">\(\alpha\)</span> is the
+<strong>learning rate</strong>.</p>
+<p>This update rule is computationally efficient and makes intuitive
+sense. Consider the following cases: - Case 1: The prediction is smaller
+than the target. Increase the parameter if the corresponding feature is
+positive, and vice versa. - Case 2: The prediction is larger than the
+target. Decrease the parameter if the corresponding feature is positive,
+and vice versa. - Case 3: The prediction is equal to the target. In this
+case, no update is required.</p>
+<h3 id="logistic-regression">Logistic Regression</h3>
+<p>Consider the binary classification problem, where the target variable
+<span class="math inline">\(y_i\)</span> can take on only <span
+class="math inline">\(0\)</span> and <span
+class="math inline">\(1\)</span>.</p>
+<p>A common choice is to use the <strong>Bernoulli distribution</strong>
+as the probabilistic assumption. Here we assume <span
+class="math inline">\(\mu = g(x_i^T \theta)\)</span> as the mean of the
+Bernoulli distribution (which is also <span
+class="math inline">\(\mathrm{Pr}(X = 1)\)</span>). So the likelihood
+function is given by <span class="math display">\[\mathcal{L}(\beta) =
+(g(x_i^T \beta))^{y_i} (1 - g(x_i^T \beta))^{1 - y_i}\]</span></p>
+<p>where <span class="math inline">\(g\)</span> is the <strong>logistic
+function</strong>: <span class="math display">\[g(z) = \frac {1} {1 +
+e^{-z}}\]</span></p>
+<p>By taking the derivatives of the log-likelihood, we can get
+essentially the same update rule as linear regression. Let <span
+class="math inline">\(h_{\beta}(x)\)</span> be the prediction given by
+the logistic regression model. We have <span
+class="math display">\[\beta \leftarrow \beta + \alpha (y_i -
+h_{\beta}(x)) {x_i}\]</span></p>
+<hr />
+<p>To derive a larger scale of models with the update rule <span
+class="math inline">\(\beta \leftarrow \beta + \alpha (y_i - h(x))
+{x_i}\)</span>, we will introduce the <strong>generalized linear
+models</strong>.</p>
+<h2 id="generalized-linear-models">Generalized Linear Models</h2>
+<h3 id="overdispersed-exponential-family">Overdispersed Exponential
+Family</h3>
+<p>Overdispersed exponential family is a generalization of exponential
+family, with a dispersion parameter <span
+class="math inline">\(\tau\)</span> involved. The probability density
+function can be expressed as: <span class="math display">\[P(y | \theta,
+\tau) = h(y, \tau) \exp \left(\frac {\theta^TT(y) - A(\theta)}
+{d(\tau)}\right)\]</span></p>
+<p>Similar to the exponential family, it has the following
+properties:</p>
+<p><strong>Property 1</strong>: <span
+class="math inline">\(\mathrm{E}(T(y)) = \frac {\partial A(\theta)}
+{\partial \theta}\)</span></p>
+<p><strong>Property 2</strong>: <span
+class="math inline">\(\mathrm{Var}(T(y)) = \frac {\partial^2 d(\tau)
+A(\theta)} {\partial \theta^2}\)</span></p>
+<p><strong>Property 3</strong>: <span class="math inline">\(\frac
+{\partial \mathcal{L}(\theta | \tau, y)} {\partial \theta} = \frac {T(y)
+- E(T(y))} {d(\tau)}\)</span>, where <span
+class="math inline">\(\mathcal{L}(\theta | \tau, y) = \log P(y | \theta,
+\tau)\)</span>.</p>
+<p><strong>Property 4</strong>: <span
+class="math inline">\(\mathcal{L}(\theta | \tau, y)\)</span> is
+concave.</p>
+<p>From my point of view, though overdispersed exponential familiy is
+more flexible compared to the ordinary exponential family as it involves
+the dispersion parameter <span class="math inline">\(\tau\)</span>,
+<span class="math inline">\(\tau\)</span> often plays no significant
+role when it comes to optimize model parameters – And that's the reason
+why I set <span class="math inline">\(\sigma = 1\)</span> in the
+derivation of the update rule in ordinary linear regression. If you
+regard <span class="math inline">\(\sigma\)</span> as a parameter of the
+probability distribution but not a constant, you will get almost the
+same result.</p>
+<h3 id="introduction-to-glms">Introduction to GLMs</h3>
+<p>We begin with a <strong>linear predictor</strong> <span
+class="math inline">\(\eta = x^T \beta\)</span>. Here, <span
+class="math inline">\(\beta\)</span> denotes the <strong>model
+parameters</strong> and <span class="math inline">\(x\)</span> denotes a
+sample of the dataset.</p>
+<p>Then, what is the probabilistic assumpsions about the conditional
+probability of the target <span class="math inline">\(y\)</span> given
+<span class="math inline">\(x\)</span> for GLMs? That is <span
+class="math display">\[y | x; \theta \sim
+\text{OverdispersedExponentialFamily}(\theta, \tau)\]</span> Let <span
+class="math inline">\(\mu = \mathrm{E}(T(x))\)</span>, then we have
+<span class="math inline">\(\frac {\partial A(\theta)} {\partial \theta}
+= \mu\)</span>。</p>
+<p>And how to we connect <span class="math inline">\(\eta\)</span> with
+<span class="math inline">\(\mu\)</span>? We can use <strong>link
+functions</strong>, which <strong>maps the mean <span
+class="math inline">\(\boldsymbol{\mu}\)</span> to the linear predictor
+<span class="math inline">\(\boldsymbol{\eta}\)</span></strong>. When
+<span class="math inline">\(\eta = \theta\)</span> always holds, we can
+refer to the link function as <strong>canonical link
+function</strong>。</p>
+<p>The diagram below shows the relationships between <span
+class="math inline">\(\theta, \mu\)</span> and <span
+class="math inline">\(\eta\)</span>, which is from <a
+target="_blank" rel="noopener" href="https://stats.stackexchange.com/a/349177/411994">stackexchange</a>:</p>
+<p><a target="_blank" rel="noopener" href="https://postimg.cc/c6KJvGqW"><img
+src="https://i.postimg.cc/05nKH9cz/J5w19.png" alt="J5w19.png" /></a></p>
+<p>Note that <span class="math inline">\(\gamma\)</span> from the
+diagram is the same as <span class="math inline">\(A\)</span> in this
+article.</p>
+<p>So what is the task for the generalized linear models? It uses its
+parameters <span class="math inline">\(\beta\)</span> to compute the
+linear predictor <span class="math inline">\(\eta\)</span>. When the
+link function is canonical, <span class="math inline">\(g(\mu)\)</span>
+is the same as <span class="math inline">\((A&#39;)^{-1}(\mu)\)</span>,
+so it comes up with <span class="math inline">\((A&#39;)^{-1}(x^T
+\beta)\)</span> as a prediction.</p>
+<p>It can be proved that, the update rule for generalized linear models
+using gradient ascent is given by:</p>
+<p><span class="math display">\[\beta \leftarrow \beta + \alpha (y_i -
+h_{\beta}(x)) {x_i}\]</span></p>
+<h3 id="linear-regression-1">Linear Regression</h3>
+<p>...</p>
+<h3 id="logistic-regression-1">Logistic Regression</h3>
+<p>...</p>
+<h3 id="softmax-regression">Softmax Regression</h3>
+<p>...</p>
+<h2 id="references-resources">References &amp; Resources</h2>
+<p><a
+target="_blank" rel="noopener" href="https://see.stanford.edu/materials/aimlcs229/cs229-notes1.pdf">Stanford
+CS229 Lecture Notes</a></p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Exponential_family">Wikipedia:
+Exponential Family</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Generalized_linear_model">Wikipedia:
+Generalized Linear Models</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://stats.stackexchange.com/questions/87615/does-log-likelihood-in-glm-have-guaranteed-convergence-to-global-maxima/">Stackexchange:
+Does log likelihood in GLM have guaranteed convergence to global
+maxima?</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://stats.stackexchange.com/questions/40876/what-is-the-difference-between-a-link-function-and-a-canonical-link-function">Stackexchange:
+What is the difference between a "link function" and a "canonical link
+function" for GLM</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#overview"><span class="nav-number">1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#exponential-family"><span class="nav-number">2.</span> <span class="nav-text">Exponential Family</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#properties"><span class="nav-number">2.1.</span> <span class="nav-text">Properties</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#linear-regression-and-logisitic-regression"><span class="nav-number">3.</span> <span class="nav-text">Linear Regression
+and Logisitic Regression</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#linear-regression"><span class="nav-number">3.1.</span> <span class="nav-text">Linear Regression</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#logistic-regression"><span class="nav-number">3.2.</span> <span class="nav-text">Logistic Regression</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#generalized-linear-models"><span class="nav-number">4.</span> <span class="nav-text">Generalized Linear Models</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#overdispersed-exponential-family"><span class="nav-number">4.1.</span> <span class="nav-text">Overdispersed Exponential
+Family</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#introduction-to-glms"><span class="nav-number">4.2.</span> <span class="nav-text">Introduction to GLMs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#linear-regression-1"><span class="nav-number">4.3.</span> <span class="nav-text">Linear Regression</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#logistic-regression-1"><span class="nav-number">4.4.</span> <span class="nav-text">Logistic Regression</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#softmax-regression"><span class="nav-number">4.5.</span> <span class="nav-text">Softmax Regression</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#references-resources"><span class="nav-number">5.</span> <span class="nav-text">References &amp; Resources</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ducati"
+      src="https://i.postimg.cc/8CTV3gyC/avatar.png">
+  <p class="site-author-name" itemprop="name">ducati</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ducatiqwq" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ducatiqwq" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://stackoverflow.com/users/23507620/ducati" title="StackOverflow → https:&#x2F;&#x2F;stackoverflow.com&#x2F;users&#x2F;23507620&#x2F;ducati" rel="noopener" target="_blank"><i class="fab fa-stack-overflow fa-fw"></i>StackOverflow</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ducati</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
