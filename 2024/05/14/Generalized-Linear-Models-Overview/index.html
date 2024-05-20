@@ -28,7 +28,7 @@
 <meta property="og:description" content="Overview After attending some lectures and reviewing several materials, it took me a considerable amount of time to grasp the basics of the exponential family and understand why and how they can be">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-05-14T09:51:37.000Z">
-<meta property="article:modified_time" content="2024-05-19T06:23:53.263Z">
+<meta property="article:modified_time" content="2024-05-20T08:28:13.408Z">
 <meta property="article:author" content="ducati">
 <meta name="twitter:card" content="summary">
 
@@ -180,7 +180,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-05-19 14:23:53" itemprop="dateModified" datetime="2024-05-19T14:23:53+08:00">2024-05-19</time>
+                <time title="Modified: 2024-05-20 16:28:13" itemprop="dateModified" datetime="2024-05-20T16:28:13+08:00">2024-05-20</time>
               </span>
 
           
@@ -352,14 +352,14 @@ class="math inline">\(\eta = x^T \beta\)</span>. Here, <span
 class="math inline">\(\beta\)</span> denotes the <strong>model
 parameters</strong> and <span class="math inline">\(x\)</span> denotes a
 sample of the dataset.</p>
-<p>Then, what is the probabilistic assumpsions about the conditional
+<p>Then, we need probabilistic assumpsions about the conditional
 probability of the target <span class="math inline">\(y\)</span> given
-<span class="math inline">\(x\)</span> for GLMs? That is <span
-class="math display">\[y | x; \theta \sim
-\text{OverdispersedExponentialFamily}(\theta, \tau)\]</span> Let <span
-class="math inline">\(\mu = \mathrm{E}(T(x))\)</span>, then we have
-<span class="math inline">\(\frac {\partial A(\theta)} {\partial \theta}
-= \mu\)</span>。</p>
+<span class="math inline">\(x\)</span> for GLMs, which has to be in the
+overdispersed exponential familiy: <span class="math display">\[y | x;
+\theta \sim \text{OverdispersedExponentialFamily}(\theta, \tau)\]</span>
+Let <span class="math inline">\(\mu = \mathrm{E}(T(x))\)</span>, then we
+have <span class="math inline">\(\frac {\partial A(\theta)} {\partial
+\theta} = \mu\)</span>。</p>
 <p>And how to we connect <span class="math inline">\(\eta\)</span> with
 <span class="math inline">\(\mu\)</span>? We can use <strong>link
 functions</strong>, which <strong>maps the mean <span
@@ -368,6 +368,10 @@ class="math inline">\(\boldsymbol{\mu}\)</span> to the linear predictor
 <span class="math inline">\(\eta = \theta\)</span> always holds, we can
 refer to the link function as <strong>canonical link
 function</strong>。</p>
+<p>Because using a canonical link function is a common choice(though
+counterexamples do exist), we will only focus on models using canonical
+link function.</p>
+<hr />
 <p>The diagram below shows the relationships between <span
 class="math inline">\(\theta, \mu\)</span> and <span
 class="math inline">\(\eta\)</span>, which is from <a
@@ -380,12 +384,13 @@ article.</p>
 <p>So what is the task for the generalized linear models? It uses its
 parameters <span class="math inline">\(\beta\)</span> to compute the
 linear predictor <span class="math inline">\(\eta\)</span>. When the
-link function is canonical, <span class="math inline">\(g(\mu)\)</span>
-is the same as <span class="math inline">\((A&#39;)^{-1}(\mu)\)</span>,
-so it comes up with <span class="math inline">\((A&#39;)^{-1}(x^T
-\beta)\)</span> as a prediction.</p>
-<p>It can be proved that, the update rule for generalized linear models
-using gradient ascent is given by:</p>
+link function is canonical, <span
+class="math inline">\(g^{-1}(\mu)\)</span> is the same as <span
+class="math inline">\(A&#39;(\mu)\)</span>, so it will predict <span
+class="math inline">\(\mu\)</span> as <span
+class="math inline">\(A&#39;(x^T \beta)\)</span>.</p>
+<p>It can be proved that the update rule for any generalized linear
+model using gradient ascent is always the following:</p>
 <p><span class="math display">\[\beta \leftarrow \beta + \alpha (y_i -
 h_{\beta}(x)) {x_i}\]</span></p>
 <h3 id="linear-regression-1">Linear Regression</h3>
