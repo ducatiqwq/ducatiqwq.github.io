@@ -176,7 +176,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-05-20 16:28:13" itemprop="dateModified" datetime="2024-05-20T16:28:13+08:00">2024-05-20</time>
+                <time title="Modified: 2024-05-20 21:14:02" itemprop="dateModified" datetime="2024-05-20T21:14:02+08:00">2024-05-20</time>
               </span>
 
           
@@ -218,8 +218,7 @@ P(y | \theta) = h(y) \exp(\eta(\theta)^T T(y) - A(\theta))
 parameter or the canonical parameter, <span
 class="math inline">\(T(y)\)</span> is the sufficient statistic, and
 <span class="math inline">\(A(\theta)\)</span> is the log partition
-funciton: <span class="math display">\[A(\theta) = \log \int h(y)
-\exp(\theta^T T(y))\ \text{d}y\]</span></p>
+function which normalizes the densities.</p>
 <h3 id="properties">Properties</h3>
 <p><strong>Property 1</strong>: <span class="math inline">\(\frac
 {\partial A(\theta)} {\partial \theta} = \mathrm{E}(T(y))\)</span></p>
@@ -325,6 +324,8 @@ class="math inline">\(\mathcal{L}(\theta | \tau, y) = \log P(y | \theta,
 <p><strong>Property 4</strong>: <span
 class="math inline">\(\mathcal{L}(\theta | \tau, y)\)</span> is
 concave.</p>
+<p>Note that these properties still hold no matter whether the
+probability density function is continuous or discrete.</p>
 <p>From my point of view, though overdispersed exponential familiy is
 more flexible compared to the ordinary exponential family as it involves
 the dispersion parameter <span class="math inline">\(\tau\)</span>,
@@ -336,7 +337,7 @@ regard <span class="math inline">\(\sigma\)</span> as a parameter of the
 probability distribution but not a constant, you will get almost the
 same result.</p>
 <h3 id="introduction-to-glms">Introduction to GLMs</h3>
-<p>We begin with a <strong>linear predictor</strong> <span
+<p>We begin with the <strong>linear predictor</strong> <span
 class="math inline">\(\eta = x^T \beta\)</span>. Here, <span
 class="math inline">\(\beta\)</span> denotes the <strong>model
 parameters</strong> and <span class="math inline">\(x\)</span> denotes a
@@ -383,11 +384,72 @@ model using gradient ascent is always the following:</p>
 <p><span class="math display">\[\beta \leftarrow \beta + \alpha (y_i -
 h_{\beta}(x)) {x_i}\]</span></p>
 <h3 id="linear-regression-1">Linear Regression</h3>
-<p>...</p>
+<p>As I mentioned above, the probabilistic assumption is the
+<strong>normal distribution</strong>, which is in the overdispersed
+exponential family:</p>
+<p><span class="math display">\[P(y; \mu, \sigma) = \frac {1}
+{\sqrt{2\pi}\sigma} \exp \left(-\frac {y^2} {2\sigma^2}\right) \exp
+\left(\frac {\mu y - \frac {\mu^2} {2}} {\sigma^2}\right)\]</span></p>
+<p>As <span class="math display">\[A(\mu) = \frac {\mu^2} {2}\]</span>,
+we have <span class="math display">\[ g^{-1}(\mu) = A&#39;(\mu) =
+\mu\]</span></p>
+<p>So <span class="math display">\[ h_{\beta}(x) = x_i^T \beta
+\]</span></p>
+<p><strong>Conclusion: For a generalized linear model with normal
+distribution as the probabilistic assumption, ordinary linear regression
+model with <span class="math inline">\(h_{\beta}(x) = x_i^T
+\beta\)</span> should be used.</strong></p>
 <h3 id="logistic-regression-1">Logistic Regression</h3>
-<p>...</p>
+<p>In binary classification tasks, the probabilistic assumption is the
+<strong>Bernoulli distribution</strong>, which is also in the
+overdispersed exponential family:</p>
+<p><span class="math display">\[\begin{aligned} P(y; \mu) &amp;= \mu^y
+(1 - \mu) ^ {1 - y} \ (y \in \{0, 1\}, \mu in [0, 1]) \\ &amp;= \exp
+\left(y \log\left(\frac {\mu} {1 - \mu}\right) + \log(1 - \mu)\right)
+\end{aligned}\]</span></p>
+<p>Let <span class="math inline">\(\eta = \log\left(\frac {\mu} {1 -
+\mu}\right)\)</span>, we have</p>
+<p><span class="math inline">\(P(y; \mu) = \exp \left(y \eta - \log (1 +
+e^{\eta})\right)\)</span></p>
+<p>Take the derivative of <span class="math inline">\(A(\eta)\)</span>
+and we will get <span class="math display">\[ A&#39;(\eta) = \frac {1}
+{1 + e^{-\eta}} \]</span></p>
+<p>Which is the logistic function.</p>
+<p><strong>Conclusion: For a generalized linear model with Bernoulli
+distribution as the probabilistic assumption, logistic regression model
+with <span class="math inline">\(h_{\beta}(x) = \mathrm{Sigmoid}(x_i^T
+\beta)\)</span> should be used.</strong></p>
 <h3 id="softmax-regression">Softmax Regression</h3>
-<p>...</p>
+<p>In the end, we are going to solve classification tasks with any
+number of classes (the target <span class="math inline">\(y\)</span> can
+take on any of more than <span class="math inline">\(2\)</span> discrete
+values).</p>
+<p>The probability distribution we are going to use is
+<strong>multinomial distribution</strong> (with <span
+class="math inline">\(n = 1\)</span>). Its probability density function
+is given by <span class="math display">\[\begin{aligned} P(y; p_1, p_2,
+\cdots, p_k) &amp;= \prod_{i} p_i^{[y = i]} \left(y \in [1, k] \cap
+\mathrm{N}^{+}, \sum_i p_i = 1 \right)\end{aligned}\]</span></p>
+<p>We can show that it is still in the overdispersed exponential family.
+<span class="math display">\[\begin{aligned} P(y; p_1, p_2, \cdots, p_k)
+&amp;= \exp \left(\begin{bmatrix} \log p_1  &amp; \log p_2  &amp;\cdots
+&amp;\log p_{k-1} \end{bmatrix} T(y) + \log \left(1 - \sum_{i &lt; k}
+p_i \right) (1 - \sum_{t \in T(y)} t) \right) \\ &amp;= \exp
+\left(\eta^T T(y) + A(\eta) \right) \end{aligned}\]</span></p>
+<p>where <span class="math display">\[\eta = \begin{bmatrix} \log p_1 -
+\log \left(1 - \sum_{i &lt; k} p_i \right) \\ \log p_2 - \log \left(1 -
+\sum_{i &lt; k} p_i \right) \\ \vdots \\ \log p_{k-1}-\log \left(1 -
+\sum_{i &lt; k} p_i \right) \end{bmatrix}^T\]</span> <span
+class="math display">\[T(y) = \begin{bmatrix} [y=1] \\ [y=2] \\ \vdots
+\\ [y=k-1] \end{bmatrix}\]</span> <span class="math display">\[A(\eta) =
+\log \left(\sum_{v \in \eta} e^v + 1\right)\]</span></p>
+<p>So <span class="math display">\[ A&#39;(\eta) = \begin{bmatrix}
+\dfrac {e^{\eta_1}} {\sum_{v \in \eta}e^v + 1} \\ \dfrac {e^{\eta_2}}
+{\sum_{v \in \eta}e^v + 1} \\ \\ \vdots \\ \\ \dfrac {e^{\eta_{k - 1}}}
+{\sum_{v \in \eta}e^v + 1}\end{bmatrix} \]</span></p>
+<p>By fixing <span class="math inline">\(\eta_k = 0\)</span> and adding
+a new entry of <span class="math inline">\(T(y)\)</span>, we get the
+softmax regression.</p>
 <h2 id="references-resources">References &amp; Resources</h2>
 <p><a
 target="_blank" rel="noopener" href="https://see.stanford.edu/materials/aimlcs229/cs229-notes1.pdf">Stanford
