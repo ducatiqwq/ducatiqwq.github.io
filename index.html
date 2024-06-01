@@ -257,87 +257,6 @@ mjx-container[display="true"] + br {
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/06/01/%C2%96BREAKING-CHANGE-webpack-5-used-to-include-polyfills-for-node-js-core-modules-by-default/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://i.postimg.cc/8CTV3gyC/avatar.png">
-      <meta itemprop="name" content="ducati">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ducati's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/06/01/%C2%96BREAKING-CHANGE-webpack-5-used-to-include-polyfills-for-node-js-core-modules-by-default/" class="post-title-link" itemprop="url">BREAKING CHANGE: webpack < 5 used to include polyfills for node.js core modules by default.</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-06-01 11:29:36 / Modified: 12:34:51" itemprop="dateCreated datePublished" datetime="2024-06-01T11:29:36+08:00">2024-06-01</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="what-is-the-issue">What is the issue?</h2>
-<p>When I ran <code>webpack</code>, the following issue was
-generated:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">BREAKING CHANGE: webpack &lt; 5 used to include polyfills for node.js core modules by default.</span><br><span class="line">This is no longer the case. Verify if you need this module and configure a polyfill for it.</span><br><span class="line"></span><br><span class="line">If you want to include a polyfill, you need to:</span><br><span class="line">        - add a fallback &#x27;resolve.fallback: &#123; &quot;path&quot;: require.resolve(&quot;path-browserify&quot;) &#125;&#x27;</span><br><span class="line">        - install &#x27;path-browserify&#x27;</span><br><span class="line">If you don&#x27;t want to include a polyfill, you can use an empty module like this:</span><br><span class="line">        resolve.fallback: &#123; &quot;path&quot;: false &#125;</span><br></pre></td></tr></table></figure>
-<p>And it matches the github link: <a
-target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/issues/20819">Issue
-#20819</a>.</p>
-<h2 id="why-was-it-generated">Why was it generated?</h2>
-<p>The reason of the issue being generated is that it fails to find
-specific modules in webpack &gt;= 5.</p>
-<h2 id="how-to-address-it">How to address it?</h2>
-<p>The <code>resolve</code> option is related to module resolution in
-webpack, and it allows you to specify how modules should be resolved, so
-we can add a fallback to include the polyfill.</p>
-<ul>
-<li>First, we install path-browserify by <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save-dev path-browserify</span><br></pre></td></tr></table></figure></li>
-<li>Then, we add the following code in the webpack.config.js
-file(remember to put it inside the <code>module.exports</code> object):
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">resolve</span>: &#123;</span><br><span class="line">	<span class="attr">extensions</span>: [<span class="string">&quot;.ts&quot;</span>, <span class="string">&quot;.js&quot;</span>],</span><br><span class="line">	<span class="attr">fallback</span>: &#123;</span><br><span class="line">		[<span class="variable constant_">YOUR_OWN_MODULE_NAME</span>]: <span class="string">&quot;path-browserify&quot;</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>You can also use <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// make sure you have imported the path module</span></span><br><span class="line">[<span class="variable constant_">YOUR_OWN_MODULE_NAME</span>]: path.<span class="title function_">resolve</span>(<span class="string">&quot;node_modules&quot;</span>, <span class="string">&quot;path-browserify&quot;</span>)</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p>Then you can run <code>webpack</code> again and the issue should be
-resolved.</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2024/05/14/Generalized-Linear-Models-Overview/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -648,7 +567,7 @@ function" for GLM</a></p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">1</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
