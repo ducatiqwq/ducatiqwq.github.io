@@ -282,7 +282,7 @@ mjx-container[display="true"] + br {
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2024-06-01 11:29:36 / Modified: 11:51:36" itemprop="dateCreated datePublished" datetime="2024-06-01T11:29:36+08:00">2024-06-01</time>
+              <time title="Created: 2024-06-01 11:29:36 / Modified: 12:34:51" itemprop="dateCreated datePublished" datetime="2024-06-01T11:29:36+08:00">2024-06-01</time>
             </span>
 
           
@@ -314,8 +314,8 @@ we can add a fallback to include the polyfill.</p>
 <li>First, we install path-browserify by <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save-dev path-browserify</span><br></pre></td></tr></table></figure></li>
 <li>Then, we add the following code in the webpack.config.js
 file(remember to put it inside the <code>module.exports</code> object):
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">resolve</span>: &#123;</span><br><span class="line">	<span class="attr">extensions</span>: [<span class="string">&quot;.ts&quot;</span>, <span class="string">&quot;.js&quot;</span>],</span><br><span class="line">	<span class="attr">fallback</span>: &#123;</span><br><span class="line">		<span class="attr">path</span>: <span class="string">&quot;path-browserify&quot;</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li>You can also use <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// make sure you have imported the path module</span></span><br><span class="line"><span class="attr">path</span>: path.<span class="title function_">resolve</span>(<span class="string">&quot;node_modules&quot;</span>, <span class="string">&quot;path-browserify&quot;</span>)</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">resolve</span>: &#123;</span><br><span class="line">	<span class="attr">extensions</span>: [<span class="string">&quot;.ts&quot;</span>, <span class="string">&quot;.js&quot;</span>],</span><br><span class="line">	<span class="attr">fallback</span>: &#123;</span><br><span class="line">		[<span class="variable constant_">YOUR_OWN_MODULE_NAME</span>]: <span class="string">&quot;path-browserify&quot;</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>You can also use <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// make sure you have imported the path module</span></span><br><span class="line">[<span class="variable constant_">YOUR_OWN_MODULE_NAME</span>]: path.<span class="title function_">resolve</span>(<span class="string">&quot;node_modules&quot;</span>, <span class="string">&quot;path-browserify&quot;</span>)</span><br></pre></td></tr></table></figure></li>
 </ul>
 <p>Then you can run <code>webpack</code> again and the issue should be
 resolved.</p>
