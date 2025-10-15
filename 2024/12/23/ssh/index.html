@@ -131,7 +131,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">4</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">6</span></a>
 
   </li>
   </ul>
@@ -215,32 +215,55 @@
 
       
         <h2 id="背景">背景</h2>
-<p>如果什么都不做，直接 ssh 连接远程服务器会提示输入 password。然而每次重新打一遍 password 是很麻烦的。</p>
-<p>一种经典的解决办法是，使用 ssh-keygen 生成 public key 和 private key，然后将 public key 传输到远程服务器上，这样就可以直接 ssh 连接远程服务器了（当然应该也有别的解决方法，但是我用了这一种）。如果有进一步的安全需求，可以设置 passphrase，这样每次连接远程服务器都需要输入 passphrase 来解锁 private key（为方便叙述，以下区分 password 和 passphrase）。</p>
-<p>当然，这样引入了一点点额外的复杂性：本地机器需要额外访问存储 private key 的文件，而非直接发送键入的 password 就可以连接远程服务器。</p>
-<p>命令行层面上实现这些是很简单的，但是如果要在 VSCode 中实现这些，就需要一些额外的配置，比如 Remote - SSH 插件。</p>
+<p>如果什么都不做，直接 ssh 连接远程服务器会提示输入
+password。然而每次重新打一遍 password 是很麻烦的。</p>
+<p>一种经典的解决办法是，使用 ssh-keygen 生成 public key 和 private
+key，然后将 public key 传输到远程服务器上，这样就可以直接 ssh
+连接远程服务器了（当然应该也有别的解决方法，但是我用了这一种）。如果有进一步的安全需求，可以设置
+passphrase，这样每次连接远程服务器都需要输入 passphrase 来解锁 private
+key（为方便叙述，以下区分 password 和 passphrase）。</p>
+<p>当然，这样引入了一点点额外的复杂性：本地机器需要额外访问存储 private
+key 的文件，而非直接发送键入的 password 就可以连接远程服务器。</p>
+<p>命令行层面上实现这些是很简单的，但是如果要在 VSCode
+中实现这些，就需要一些额外的配置，比如 Remote - SSH 插件。</p>
 <h2 id="问题">问题</h2>
 <p>配置完毕之后直接发送 ssh 连接请求，发现还是要输入 password？</p>
 <p>打开日志，发现如下错误：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">no such identity: /home/ducati/.ssh/id_rsa: No such file or directory</span><br></pre></td></tr></table></figure>
-<p>在命令行确认了一下，发现这个文件确实存在；同时，直接命令行 ssh 连接远程服务器，是<strong>不需要</strong>输入 password 的。</p>
+<p>在命令行确认了一下，发现这个文件确实存在；同时，直接命令行 ssh
+连接远程服务器，是<strong>不需要</strong>输入 password 的。</p>
 <p>？？？</p>
-<p>更加离谱的是，日志里显示 ssh 的 config 文件是可以正常读取的，但是 identityFile（即 <code>/home/ducati/.ssh/id_rsa</code>）却读取不到。两者在同一目录下，权限也是一样的。</p>
+<p>更加离谱的是，日志里显示 ssh 的 config 文件是可以正常读取的，但是
+identityFile（即
+<code>/home/ducati/.ssh/id_rsa</code>）却读取不到。两者在同一目录下，权限也是一样的。</p>
 <h2 id="解决">解决</h2>
-<p>首先我尝试改权限，无脑把两个文件和父目录的权限都改成 777，问题依旧。</p>
-<p>然后我又盯着配置文件看了好久，也重启了几次 VSCode，重装了几次插件，问题还是没有解决。</p>
-<p>我寻思着，他认为 <code>/home/ducati/.ssh/id_rsa</code> 不存在，肯定是经过了文件系统调用的，那不妨直接用 strace 监测所有与 vscode-server 相关进程的文件系统调用，看看到底是哪里出了问题。</p>
+<p>首先我尝试改权限，无脑把两个文件和父目录的权限都改成
+777，问题依旧。</p>
+<p>然后我又盯着配置文件看了好久，也重启了几次
+VSCode，重装了几次插件，问题还是没有解决。</p>
+<p>我寻思着，他认为 <code>/home/ducati/.ssh/id_rsa</code>
+不存在，肯定是经过了文件系统调用的，那不妨直接用 strace 监测所有与
+vscode-server 相关进程的文件系统调用，看看到底是哪里出了问题。</p>
 <p>打出来的日志很长，但是里面却只有</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">readlink(&quot;/proc/2933/cwd&quot;, &quot;/home/ducati/.ssh&quot;, 4096)</span><br></pre></td></tr></table></figure>
 <p>之类的系统调用，没有任何关于 id_rsa 的。</p>
-<p>换言之，这说明它压根就<strong>没有在我的本地 WSL 里面读取 id_rsa 文件</strong>。那它凭什么认为这个文件不存在呢？</p>
+<p>换言之，这说明它压根就<strong>没有在我的本地 WSL 里面读取 id_rsa
+文件</strong>。那它凭什么认为这个文件不存在呢？</p>
 <p>我的第一反应是，它是不是在另一个地方读取的？</p>
-<p>无非就两种情况，是用了 Windows 的系统调用，或者用了远程服务器的系统调用。后者显然不可能，private key 是不会传输到远程服务器的。那么就只有前者了。</p>
-<p>换言之，现在的情况是，我在 WSL 里用 Remote - SSH 插件的时候，它<strong>混用了 Windows 的系统调用</strong>，导致无法读取 <code>/home/ducati/.ssh/id_rsa</code> 这个路径。</p>
-<p>然后我翻到了 <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/66160457/vscode-remote-ssh-cannot-identify-private-key-file">这个</a>。</p>
-<p>我按照其中的格式把 IdentityFile 这个 attribute 的值换成了 Windows 的路径，然后问题一下就解决了。</p>
+<p>无非就两种情况，是用了 Windows
+的系统调用，或者用了远程服务器的系统调用。后者显然不可能，private key
+是不会传输到远程服务器的。那么就只有前者了。</p>
+<p>换言之，现在的情况是，我在 WSL 里用 Remote - SSH
+插件的时候，它<strong>混用了 Windows 的系统调用</strong>，导致无法读取
+<code>/home/ducati/.ssh/id_rsa</code> 这个路径。</p>
+<p>然后我翻到了 <a
+target="_blank" rel="noopener" href="https://stackoverflow.com/questions/66160457/vscode-remote-ssh-cannot-identify-private-key-file">这个</a>。</p>
+<p>我按照其中的格式把 IdentityFile 这个 attribute 的值换成了 Windows
+的路径，然后问题一下就解决了。</p>
 <hr />
-<p>至今原因不明是我自己配置错了导致 Remote-SSH 插件对于 IdentityFile 用了 Windows 的 File system，还是这个插件本身的 Bug。不过这个问题解决了，我也就先不管了。</p>
+<p>至今原因不明是我自己配置错了导致 Remote-SSH 插件对于 IdentityFile
+用了 Windows 的 File system，还是这个插件本身的
+Bug。不过这个问题解决了，我也就先不管了。</p>
 
     </div>
 
@@ -354,7 +377,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
