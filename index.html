@@ -239,7 +239,7 @@ mjx-container[display="true"] + br {
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">8</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">10</span></a>
 
   </li>
   </ul>
@@ -265,6 +265,91 @@ mjx-container[display="true"] + br {
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/10/26/autodl_preparations/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.postimg.cc/8CTV3gyC/avatar.png">
+      <meta itemprop="name" content="ducati">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ducati's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/10/26/autodl_preparations/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2025-10-26 20:02:28 / Modified: 20:53:04" itemprop="dateCreated datePublished" datetime="2025-10-26T20:02:28+08:00">2025-10-26</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="transfer-data-disk-to-another-server">Transfer data disk to
+another server</h2>
+<ul>
+<li>If the two machines are under the same AutoDL account, you can
+directly transfer the data disk through the AutoDL web interface.</li>
+<li>If the two machines are under different AutoDL accounts, you can use
+<code>rsync</code> to transfer the data disk. Below, we provide an
+example command to transfer the data disk from Server A to Server B.
+<strong>All symbolic links are preserved without being
+dereferenced.</strong></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rsync -avz -e <span class="string">&quot;ssh -p &lt;PORT&gt;&quot;</span> &lt;LOCAL_PATH&gt;/ &lt;USERNAME&gt;@&lt;SERVER_B_IP&gt;:&lt;REMOTE_PATH&gt;/</span><br></pre></td></tr></table></figure>
+<p>Explanation of some command options:</p>
+<ul>
+<li><code>-a</code>: Archive mode, which preserves permissions,
+timestamps, symbolic links, etc.</li>
+<li><code>-v</code>: Verbose mode, which provides detailed output of the
+transfer process.</li>
+<li><code>-z</code>: Compresses data during transfer to save
+bandwidth.</li>
+</ul>
+<h2 id="install-sudo">Install <code>sudo</code></h2>
+<p>This is a straightforward step. But do remember to run
+<code>apt-get update</code> first.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get update</span><br><span class="line">apt-get install sudo</span><br></pre></td></tr></table></figure>
+<p>Then you can add your user to the <code>sudo</code> group:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">usermod -aG sudo &lt;USERNAME&gt;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -378,6 +463,78 @@ mjx-container[display="true"] + br {
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2025/10/25/weak_law_of_large_numbers/">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/10/25/strong_law_of_large_numbers/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://i.postimg.cc/8CTV3gyC/avatar.png">
+      <meta itemprop="name" content="ducati">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ducati's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/10/25/strong_law_of_large_numbers/" class="post-title-link" itemprop="url">Proof of the Strong Law of Large Numbers</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-10-25 23:28:30" itemprop="dateCreated datePublished" datetime="2025-10-25T23:28:30+08:00">2025-10-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-11-08 21:51:07" itemprop="dateModified" datetime="2025-11-08T21:51:07+08:00">2025-11-08</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Proof of the Strong Law of Large Numbers (SLLN) using Kronecker's lemma, Kolmogorov's maximal inequality, and Khinchine-Kolmogorov convergence theorem.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/10/25/strong_law_of_large_numbers/">
                 Read more &raquo;
               </a>
             </div>
@@ -873,7 +1030,7 @@ mjx-container[display="true"] + br {
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
